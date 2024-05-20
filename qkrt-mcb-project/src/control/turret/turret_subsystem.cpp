@@ -55,12 +55,12 @@ void TurretSubsystem::initialize()
 // setVelocityGimbal function
 void TurretSubsystem::setVelocityGimbal(float pitch, float yaw)
 {
-    pitch = limitVal(rpmToMilliVolts(pitch), -MAX_MV, MAX_MV);
-    yaw   = limitVal(rpmToMilliVolts(yaw), -MAX_MV, MAX_MV);
+    // pitch = limitVal(rpmToMilliVolts(pitch), -MAX_MV, MAX_MV);
+    // yaw   = limitVal(rpmToMilliVolts(yaw), -MAX_MV, MAX_MV);
 
-    if (pitch < 0){
-        pitch = pitch/4.0;
-    }
+    // if (pitch < 0){
+    //     pitch = pitch/4.0;
+    // }
 
     // desiredOutput takes milliVolts as input
     desiredOutput[static_cast<uint8_t>(MotorId::PITCH)] = pitch;
@@ -71,7 +71,7 @@ void TurretSubsystem::setVelocityGimbal(float pitch, float yaw)
 void TurretSubsystem::refresh()
 {
     auto runPid = [](Pid &pid, Motor &motor, float desiredOutput) {
-        pid.update(desiredOutput - motor.getShaftRPM());
+        pid.update(desiredOutput - motor.getEncoderUnwrapped());
         motor.setDesiredOutput(pid.getValue());
     };
 
