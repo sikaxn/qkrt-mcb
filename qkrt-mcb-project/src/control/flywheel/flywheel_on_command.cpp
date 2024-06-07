@@ -37,9 +37,13 @@ namespace flywheel
 
 void FlywheelOnCommand::initialize() {}
 
+
 void busy_wait_delay_ms(int milliseconds) {
     volatile int count = 0;
-    const int delay_count = 24000 * milliseconds; // Adjust this factor based on your CPU speed
+    const int cpu_speed_hz = 2200000000; // 2.20 GHz in Hz
+    const int cycles_per_ms = cpu_speed_hz / 1000; // Convert Hz to cycles per millisecond
+    const int delay_count = cycles_per_ms * milliseconds; // Total delay cycles
+
     while (count < delay_count) {
         ++count;
     }
