@@ -40,14 +40,10 @@ AgitatorCommand::AgitatorCommand(
 
 void AgitatorCommand::execute()
 {
-    operatorInterface.pollInputDevices();
-
-    if (operatorInterface.getAgitatorInput()) 
-        agitator.setSetpoint(8);
-    else 
-        agitator.setSetpoint(0);
+    agitator.setSetpoint(8);
+    // agitator.setSetpoint(0);
 }
 
 void AgitatorCommand::end(bool) { agitator.setSetpoint(0); }
 
-};  // namespace control::chassis
+};  // namespace control::agitator
