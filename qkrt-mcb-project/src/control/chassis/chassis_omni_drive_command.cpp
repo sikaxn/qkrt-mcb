@@ -56,10 +56,14 @@
 // };  // namespace control::chassis
 
 #include "chassis_omni_drive_command.hpp"
+
 #include <chrono>  // Include the chrono library for time duration
 #include <thread>  // Include the thread library for delays
+
 #include "tap/algorithms/math_user_utils.hpp"
+
 #include "control/control_operator_interface.hpp"
+
 #include "chassis_subsystem.hpp"
 
 using tap::algorithms::limitVal;
@@ -75,26 +79,37 @@ ChassisOmniDriveCommand::ChassisOmniDriveCommand(
     addSubsystemRequirement(&chassis);
 }
 
+// delay function
+void busy_wait_delay_ms(int milliseconds)
+{
+    volatile int count = 0;
+    const int delay_count = 17000 * milliseconds;  // Total delay cycles
+
+    while (count < delay_count)
+    {
+        ++count;
+    }
+}
+
 bool flag = true;
 
-
-//NOTE: calculate the actual distance it covers and the speed the robot moves at to get the time in seconds or miliseconds.
-//Use that calculated time as delay to make the robot cover that exact distance and stop
-
+// NOTE: calculate the actual distance it covers and the speed the robot moves at to get the time in
+// seconds or miliseconds. Use that calculated time as delay to make the robot cover that exact
+// distance and stop
 
 void ChassisOmniDriveCommand::execute()
 {
-    if (flag)
+    if (flag == true)
     {
         chassis.setVelocityOmniDrive(1, 1, 1, 1);
-        modm::delay_ms(50000);
+        busy_wait_delay_ms(1000);  // 1s delay
 
         flag = false;
     }
     else
     {
         chassis.setVelocityOmniDrive(0, 0, 0, 0);
-        modm::delay_ms(50000);
+        busy_wait_delay_ms(1000);  // 1s delay
     }
 }
 
