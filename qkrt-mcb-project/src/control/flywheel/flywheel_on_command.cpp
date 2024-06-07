@@ -18,29 +18,39 @@
  */
 
 #include "flywheel_on_command.hpp"
-
+#include "tap/communication/gpio/leds.hpp"
 #include "tap/control/command.hpp"
-
+#include "control/control_operator_interface.hpp"
 #include "flywheel_subsystem.hpp"
 
-#include "tap/communication/gpio/leds.hpp"
+#include <thread>  // Include the thread library for delays
+#include <chrono>  // Include the chrono library for time duration
 
-#include "control/control_operator_interface.hpp"
+#include "tap/algorithms/math_user_utils.hpp"
+
+
 
 namespace control
 {
 namespace flywheel
 {
+
 void FlywheelOnCommand::initialize() {}
 
-void FlywheelOnCommand::execute() 
-{    
-    operatorInterface.pollInputDevices();
+void busy_wait_delay_ms(int milliseconds) {
+    volatile int count = 0;
+    const int delay_count = 24000 * milliseconds; // Adjust this factor based on your CPU speed
+    while (count < delay_count) {
+        ++count;
+    }
+}
 
-    if (operatorInterface.getFlyWheelInput())
-        flywheel->setDesiredOutput(spinning_pwm);
-    else 
-        flywheel->setDesiredOutput(OFF_PWM); 
+void FlywheelOnCommand::execute()
+{
+    //busy_wait_delay_ms(10000);
+    flywheel->setDesiredOutput(spinning_pwm);
+    busy_wait_delay_ms(10000); //10s delay
+    flywheel->setDesiredOutput(OFF_PWM);
 }
 
 void FlywheelOnCommand::end(bool) { flywheel->setDesiredOutput(0.25f); }
