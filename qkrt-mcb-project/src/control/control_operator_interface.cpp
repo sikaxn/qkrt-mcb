@@ -61,7 +61,7 @@ void ControlOperatorInterface::pollInputDevices() {
     /* toggle between controller and keyboard mode */
     static bool pressedLastInterval = false;
 
-    if (remote.keyPressed(Remote::Key::Q)) {
+    if(remote.getSwitch(Remote::Switch::LEFT_SWITCH) == Remote::SwitchState::UP){
         if (!pressedLastInterval) {
             activeDevice = (activeDevice == DeviceType::CONTROLLER) ?
                     DeviceType::KEYBOARDMOUSE : DeviceType::CONTROLLER;
@@ -70,6 +70,16 @@ void ControlOperatorInterface::pollInputDevices() {
         else return;
     }
     else pressedLastInterval = false;
+/*
+    if (remote.keyPressed(Remote::Key::Q)) {
+        if (!pressedLastInterval) {
+            activeDevice = (activeDevice == DeviceType::CONTROLLER) ?
+                    DeviceType::KEYBOARDMOUSE : DeviceType::CONTROLLER;
+            pressedLastInterval = true;
+        }
+        else return;
+    }
+    else pressedLastInterval = false;*/
 
     /* poll for input using the chosen active device */
     static float rawX, rawY;
@@ -81,8 +91,9 @@ void ControlOperatorInterface::pollInputDevices() {
             rawY = remote.getChannel(Remote::Channel::LEFT_VERTICAL);
             control_s.pitch = remote.getChannel(Remote::Channel::RIGHT_VERTICAL);
             control_s.yaw   = remote.getChannel(Remote::Channel::RIGHT_HORIZONTAL) - imu.getGz()/515;
-            control_s.flywheel = remote.getSwitch(Remote::Switch::LEFT_SWITCH) == Remote::SwitchState::UP;
-            control_s.agitator = remote.getSwitch(Remote::Switch::RIGHT_SWITCH) == Remote::SwitchState::UP;
+            //control_s.flywheel = remote.getSwitch(Remote::Switch::LEFT_SWITCH) == Remote::SwitchState::UP;
+            control_s.flywheel = (remote.getSwitch(Remote::Switch::RIGHT_SWITCH) == Remote::SwitchState::MID || remote.getSwitch(Remote::Switch::RIGHT_SWITCH) == Remote::SwitchState::UP);
+            control_s.agitator = (remote.getSwitch(Remote::Switch::RIGHT_SWITCH) == Remote::SwitchState::UP );
             wheelInput = remote.getWheel();
             control_s.beyblade =
                 wheelInput >  WHEEL_DEADZONE ? true  :
@@ -106,9 +117,11 @@ void ControlOperatorInterface::pollInputDevices() {
             control_s.pitch = control_s.yaw = 0.0;
     }
 
-    control_s.x = std::cos(-internal::turretYaw) * rawX - std::sin(-internal::turretYaw) * rawY;
-    control_s.y = std::sin(-internal::turretYaw) * rawX + std::cos(-internal::turretYaw) * rawY;
-    control_s.w = control_s.beyblade ? 0.4f : 0.0f;
+
+
+    control_s.x = control_s.yaw;//std::cos(-internal::turretYaw) * rawX - std::sin(-internal::turretYaw) * rawY;
+    control_s.y = control_s.pitch;//std::sin(-internal::turretYaw) * rawX + std::cos(-internal::turretYaw) * rawY;
+    control_s.w = 0;//control_s.beyblade ? 0.4f : 0.0f;
     control_s.normFactor = std::max(std::abs(control_s.x) + std::abs(control_s.y) + std::abs(control_s.w), 1.0f);
 }
 

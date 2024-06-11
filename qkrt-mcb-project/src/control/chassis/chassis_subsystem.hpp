@@ -106,7 +106,7 @@ private:
     inline float mpsToRpm(float mps)
     {
         static constexpr float GEAR_RATIO = 19.0f;
-        static constexpr float WHEEL_DIAMETER_M = 0.076f;
+        static constexpr float WHEEL_DIAMETER_M = 0.056f;
         static constexpr float WHEEL_CIRCUMFERANCE_M = M_PI * WHEEL_DIAMETER_M;
         static constexpr float SEC_PER_M = 60.0f;
 
