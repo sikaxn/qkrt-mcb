@@ -52,10 +52,8 @@ void ChassisSubsystem::initialize()
     for (auto &motor : motors)
     {
         motor.initialize();
-        drivers->pwm.setTimerFrequency(tap::gpio::Pwm::C3,200.0f);
-        drivers->pwm.setTimerFrequency(tap::gpio::Pwm::C4,200.0f);
-        drivers->pwm.setTimerFrequency(tap::gpio::Pwm::C5,200.0f);
-        drivers->pwm.setTimerFrequency(tap::gpio::Pwm::C6,200.0f);
+        drivers->pwm.setTimerFrequency(tap::gpio::Pwm::TIMER1,200.0f);
+        drivers->pwm.setTimerFrequency(tap::gpio::Pwm::TIMER8,200.0f);
     }
 }
 
@@ -83,10 +81,10 @@ void ChassisSubsystem::setVelocityOmniDrive(float leftFront,
 }
 
 void ChassisSubsystem:: setPWMArcadedrive(float left, float right){
-    drivers->pwm.write(left, tap::gpio::Pwm::C3);
-    drivers->pwm.write(left, tap::gpio::Pwm::C4);
-    drivers->pwm.write(right, tap::gpio::Pwm::C5);
-    drivers->pwm.write(right, tap::gpio::Pwm::C6);
+    drivers->pwm.write(left, tap::gpio::Pwm::C1);
+    drivers->pwm.write(left, tap::gpio::Pwm::C2);
+    drivers->pwm.write(right, tap::gpio::Pwm::C3);
+    drivers->pwm.write(right, tap::gpio::Pwm::C4);
 }
 
 void ChassisSubsystem::refresh()
