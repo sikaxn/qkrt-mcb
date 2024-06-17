@@ -105,10 +105,10 @@ void ControlOperatorInterface::pollInputDevices() {
             //    control_s.beyblade;
             break;
         case DeviceType::KEYBOARDMOUSE:
-            rawX = remote.getChannel(Remote::Channel::LEFT_HORIZONTAL);
-            rawY = remote.getChannel(Remote::Channel::LEFT_VERTICAL);
-            control_s.pitch = remote.getChannel(Remote::Channel::RIGHT_VERTICAL);
-            control_s.yaw   = remote.getChannel(Remote::Channel::RIGHT_HORIZONTAL);
+            rawX = 0;
+            rawY = 0;
+            control_s.pitch = 0;
+            control_s.yaw   = 0;
             //control_s.flywheel = remote.getSwitch(Remote::Switch::LEFT_SWITCH) == Remote::SwitchState::UP;
             //control_s.flywheel = (remote.getSwitch(Remote::Switch::RIGHT_SWITCH) == Remote::SwitchState::MID || remote.getSwitch(Remote::Switch::RIGHT_SWITCH) == Remote::SwitchState::UP);
             //control_s.agitator = (remote.getSwitch(Remote::Switch::RIGHT_SWITCH) == Remote::SwitchState::UP );
