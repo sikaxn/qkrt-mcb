@@ -42,6 +42,10 @@ public:
     float getChassisOmniRightFrontInput();
     float getChassisOmniRightBackInput();
 
+    float getChassisPWMLeft();
+    float getChassisPWMRight();
+
+
     float getTurretPitchInput();
     float getTurretYawInput();
 

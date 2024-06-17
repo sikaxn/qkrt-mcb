@@ -2,6 +2,19 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "cwd": "${workspaceFolder}",
+            "executable": "./qkrt-mcb-project/build/hardware/scons-debug/qkrt-mcb-project.elf",
+            "name": "Debug with PyOCD",
+            "request": "launch",
+            "type": "cortex-debug",
+            "runToEntryPoint": "main",
+            "showDevDebugOutput": "none",
+            "target": "STM32F427II",
+            "servertype": "pyocd",
+            "liveWatch": { "enabled": true, "samplesPerSecond": 4 }
+        },
+
+        {
             "name": "Debug Tests",
             "type": "cppdbg",
             "request": "launch",
@@ -52,7 +65,8 @@
             "device": "STM32F427II",
             "configFiles": [
                 "./qkrt-mcb-project/openocd.cfg"
-            ]
+            ],
+            "liveWatch": { "enabled": true, "samplesPerSecond": 4 }
         }
     ]
 }

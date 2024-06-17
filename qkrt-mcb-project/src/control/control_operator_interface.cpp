@@ -24,7 +24,9 @@
 #include "tap/communication/sensors/imu/bmi088/bmi088.hpp"
 #include "tap/architecture/clock.hpp"
 
+
 #include "internal.hpp"
+
 
 using tap::algorithms::limitVal;
 using tap::communication::serial::Remote;
@@ -48,6 +50,8 @@ struct ControlState {
     bool flywheel = false;
     bool agitator = false;
     bool beyblade = false;
+    float wheelL = 0.0;
+    float wheelR = 0.0;
 };
 
 static ControlState control_s;
@@ -123,6 +127,40 @@ void ControlOperatorInterface::pollInputDevices() {
     control_s.y = control_s.pitch;//std::sin(-internal::turretYaw) * rawX + std::cos(-internal::turretYaw) * rawY;
     control_s.w = 0;//control_s.beyblade ? 0.4f : 0.0f;
     control_s.normFactor = std::max(std::abs(control_s.x) + std::abs(control_s.y) + std::abs(control_s.w), 1.0f);
+
+    control_s.x = (control_s.x - 0.5) * 2.0;
+    control_s.y = (control_s.y - 0.5) * 2.0;
+
+    control_s.wheelL = control_s.x + control_s.y;
+    control_s.wheelR = control_s.x - control_s.y;
+    /*drivers->pwm.write(control_s.wheelL, tap::gpio::Pwm::C3);
+    drivers->pwm.write(control_s.wheelL, tap::gpio::Pwm::C4);
+    drivers->pwm.write(control_s.wheelR, tap::gpio::Pwm::C5);
+    drivers->pwm.write(control_s.wheelR, tap::gpio::Pwm::C6);*/
+}
+
+float ControlOperatorInterface::getChassisPWMLeft(){
+    control_s.wheelL = (control_s.wheelL / 2.0) + 0.5;
+    if(control_s.wheelL > 0.99){
+        control_s.wheelL = 0.99;
+    }
+    if(control_s.wheelL < 0.01){
+        control_s.wheelL = 0.01;
+    }
+    return((control_s.wheelL / 2.0) + 0.5);
+
+}
+
+float ControlOperatorInterface::getChassisPWMRight(){
+    control_s.wheelR = (control_s.wheelR/ 2.0) + 0.5;
+    if(control_s.wheelR > 0.99){
+        control_s.wheelR = 0.99;
+    }
+    if(control_s.wheelR < 0.01){
+        control_s.wheelR = 0.01;
+    }
+    return((control_s.wheelR/ 2.0) + 0.5);
+
 }
 
 float ControlOperatorInterface::getChassisOmniLeftFrontInput() {

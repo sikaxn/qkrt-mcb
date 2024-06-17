@@ -94,7 +94,7 @@ public:
     /// forward, negative is backwards.
     ///
     void setVelocityOmniDrive(float leftFront, float leftBack, float rightFront, float rightBack);
-    
+    void setPWMArcadedrive(float left, float right);
     ///
     /// @brief Runs velocity PID controllers for the drive motors.
     ///

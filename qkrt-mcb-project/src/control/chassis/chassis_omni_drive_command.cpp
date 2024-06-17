@@ -25,6 +25,7 @@
 
 #include "chassis_subsystem.hpp"
 
+
 using tap::algorithms::limitVal;
 
 namespace control::chassis
@@ -40,6 +41,14 @@ ChassisOmniDriveCommand::ChassisOmniDriveCommand(
 
 void ChassisOmniDriveCommand::execute()
 {
+
+
+    chassis.setPWMArcadedrive(
+        operatorInterface.getChassisPWMLeft(),
+        operatorInterface.getChassisPWMRight()
+        );
+    
+
     operatorInterface.pollInputDevices();
 
     auto scale = [](float raw) -> float {

@@ -23,6 +23,8 @@
 
 #include "drivers.hpp"
 
+#include "control/control_operator_interface.hpp"
+
 using tap::algorithms::limitVal;
 
 namespace control::chassis
@@ -59,6 +61,7 @@ void ChassisSubsystem::setVelocityOmniDrive(float leftFront,
                                             float rightFront,
                                             float rightBack)
 {
+    
     leftFront  = mpsToRpm(leftFront);
     leftBack   = mpsToRpm(leftBack);
     rightFront = mpsToRpm(rightFront);
@@ -73,6 +76,13 @@ void ChassisSubsystem::setVelocityOmniDrive(float leftFront,
     desiredOutput[static_cast<uint8_t>(MotorId::LB)] = leftBack;
     desiredOutput[static_cast<uint8_t>(MotorId::RF)] = rightFront;
     desiredOutput[static_cast<uint8_t>(MotorId::RB)] = rightBack;
+}
+
+void ChassisSubsystem:: setPWMArcadedrive(float left, float right){
+    drivers->pwm.write(left, tap::gpio::Pwm::C3);
+    drivers->pwm.write(left, tap::gpio::Pwm::C4);
+    drivers->pwm.write(right, tap::gpio::Pwm::C5);
+    drivers->pwm.write(right, tap::gpio::Pwm::C6);
 }
 
 void ChassisSubsystem::refresh()
