@@ -52,8 +52,8 @@ void ChassisSubsystem::initialize()
     for (auto &motor : motors)
     {
         motor.initialize();
-        drivers->pwm.setTimerFrequency(tap::gpio::Pwm::TIMER1,200.0f);
-        drivers->pwm.setTimerFrequency(tap::gpio::Pwm::TIMER8,200.0f);
+        drivers->pwm.setTimerFrequency(tap::gpio::Pwm::TIMER1,198.0f);
+        drivers->pwm.setTimerFrequency(tap::gpio::Pwm::TIMER8,198.0f);
     }
 }
 
