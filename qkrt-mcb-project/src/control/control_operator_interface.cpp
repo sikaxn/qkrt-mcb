@@ -131,8 +131,8 @@ void ControlOperatorInterface::pollInputDevices() {
     control_s.normFactor = std::max(std::abs(control_s.x) + std::abs(control_s.y) + std::abs(control_s.w), 1.0f);
 
     control_s.x = (control_s.x - 0.5) * 2.0;
-    control_s.y = (control_s.y - 0.5) * 2.0;
-
+    control_s.y = (control_s.y - 0.5) * 2.0 + 1;
+    
     control_s.wheelL = control_s.x + control_s.y;
     control_s.wheelR = control_s.x - control_s.y;
     /*drivers->pwm.write(control_s.wheelL, tap::gpio::Pwm::C3);
@@ -146,22 +146,28 @@ float ControlOperatorInterface::getChassisPWMLeft(){
     if(control_s.wheelL > 0.99){
         control_s.wheelL = 0.99;
     }
-    if(control_s.wheelL < 0.01){
-        control_s.wheelL = 0.01;
+    if(control_s.wheelL < -0.99){
+        control_s.wheelL = -0.99;
     }
-    return((control_s.wheelL / 2.0) + 0.5);
+    control_s.wheelL = (control_s.wheelL / 2.0) + 0.5;
+    control_s.wheelL = 0.05 * control_s.wheelL + 0.05;
+    return(control_s.wheelL);
 
 }
 
 float ControlOperatorInterface::getChassisPWMRight(){
+
+
     control_s.wheelR = (control_s.wheelR/ 2.0) + 0.5;
     if(control_s.wheelR > 0.99){
         control_s.wheelR = 0.99;
     }
-    if(control_s.wheelR < 0.01){
-        control_s.wheelR = 0.01;
+    if(control_s.wheelR < -0.99){
+        control_s.wheelR = -0.99;
     }
-    return((control_s.wheelR/ 2.0) + 0.5);
+    control_s.wheelR =  (control_s.wheelR/ 2.0) + 0.5;
+    control_s.wheelR = 0.05 * control_s.wheelR + 0.05;
+    return(control_s.wheelR);
 
 }
 
